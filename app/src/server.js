@@ -19,16 +19,6 @@ app.get("/ready", (req, res) => {
   res.status(200).json({ status: "ready" });
 });
 
-app.get("/cpu", (req, res) => {
-  const end = Date.now() + 500;
-
-  while (Date.now() < end) {
-    Math.sqrt(Math.random());
-  }
-
-  res.json({ status: "done" });
-});
-
 app.listen(port, "0.0.0.0", () => {
   console.log(`Application listening on port ${port}`);
 });
