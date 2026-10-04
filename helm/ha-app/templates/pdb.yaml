@@ -1,0 +1,11 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "ha-app.fullname" . }}
+  labels:
+    {{- include "ha-app.labels" . | nindent 4 }}
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      {{- include "ha-app.selectorLabels" . | nindent 6 }}
