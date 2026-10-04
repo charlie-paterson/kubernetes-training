@@ -40,10 +40,11 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           
+          {{- if .Values.persistence.enabled }}
           volumeMounts:
             - name: app-data
               mountPath: {{ .Values.persistence.mountPath }}
-
+          {{- end }}
           startupProbe:
             httpGet:
               path: /health
@@ -66,7 +67,10 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 2
             failureThreshold: 3
+            
+      {{- if .Values.persistence.enabled }}
       volumes:
         - name: app-data
           persistentVolumeClaim:
             claimName: {{ include "ha-app.fullname" . }}
+      {{- end }}
