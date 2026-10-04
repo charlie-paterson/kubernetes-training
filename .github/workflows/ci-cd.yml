@@ -1,0 +1,50 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Docker login to GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | \
+            docker login ghcr.io \
+            -u "${{ github.actor }}" \
+            --password-stdin
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t ghcr.io/${{ github.repository_owner }}/ha-app:${{ github.sha }} \
+            ./app
+
+      - name: Push Docker image
+        run: |
+          docker push \
+            ghcr.io/${{ github.repository_owner }}/ha-app:${{ github.sha }}
+
+      - name: Helm deploy
+        run: |
+          helm upgrade --install ha-app ./helm/ha-app \
+            --set image.repository=ghcr.io/${{ github.repository_owner }}/ha-app \
+            --set image.tag=${{ github.sha }} \
+            --set app.version=${{ github.sha }} \
+            --wait
+
+      - name: Verify deployment
+        run: |
+          kubectl rollout status deployment/ha-app
+          kubectl get pods
+          kubectl get service
