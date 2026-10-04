@@ -27,3 +27,9 @@ ingress:
   host: ha-app.local
   path: /
   pathType: Prefix
+
+persistence:
+  enabled: true
+  size: 1Gi
+  accessMode: ReadWriteOnce
+  mountPath: /data

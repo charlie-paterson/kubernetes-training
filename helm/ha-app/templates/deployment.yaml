@@ -23,6 +23,7 @@ spec:
         {{- include "ha-app.selectorLabels" . | nindent 8 }}
 
     spec:
+      
       containers:
         - name: app
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -38,6 +39,10 @@ spec:
 
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          
+          volumeMounts:
+            - name: app-data
+              mountPath: {{ .Values.persistence.mountPath }}
 
           startupProbe:
             httpGet:
@@ -61,3 +66,7 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 2
             failureThreshold: 3
+      volumes:
+        - name: app-data
+          persistentVolumeClaim:
+            claimName: {{ include "ha-app.fullname" . }}
