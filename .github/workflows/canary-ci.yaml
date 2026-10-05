@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - "feature/**"
+    paths:
+      - canary-platform/**
 
   pull_request:
     branches:
