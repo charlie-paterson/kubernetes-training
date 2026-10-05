@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+    paths:
+      - ha-app/**
+
 permissions:
   contents: read
   packages: write
