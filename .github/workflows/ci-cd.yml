@@ -28,7 +28,7 @@ jobs:
         run: |
           docker build \
             -t ghcr.io/${{ github.repository_owner }}/ha-app:${{ github.sha }} \
-            ./app
+            ./ha-app/app
 
       - name: Push Docker image
         run: |
