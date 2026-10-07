@@ -83,3 +83,4 @@ jobs:
             --set image.tag=${{ github.sha }} \
             --set app.version=1.0.0 \
             --set app.release=stable
+            
