@@ -68,3 +68,19 @@ jobs:
         run: |
           docker push \
             ghcr.io/${{ github.repository_owner }}/canary-demo:${{ github.sha }}
+
+  deploy-stable:
+    needs: build
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+      - uses: actions/checkout@v4
+
+      - name: Deploy stable release
+        run: |
+          helm upgrade --install canary-stable ./canary-platform/helm \
+            --set image.tag=${{ github.sha }} \
+            --set app.version=1.0.0 \
+            --set app.release=stable
+
