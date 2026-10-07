@@ -1,5 +1,8 @@
 replicaCount: 3
 
+imagePullSecrets:
+  - name: ghcr-secret
+
 image:
   repository: ghcr.io/charlie-paterson/canary-demo
   tag: "latest"
