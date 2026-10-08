@@ -17,8 +17,3 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/name: {{ include "canary-app.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-
-{{- define "canary-app.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "canary-app.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
