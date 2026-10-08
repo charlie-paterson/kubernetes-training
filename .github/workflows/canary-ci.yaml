@@ -87,7 +87,7 @@ jobs:
             --set app.version=1.0.0 \
             --set app.release=stable
 
-  deploy-stable:
+  deploy-canary:
     needs: build
     if: github.event_name == 'workflow_dispatch'
     runs-on: self-hosted
