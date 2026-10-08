@@ -4,7 +4,7 @@ const os = require("os");
 const app = express();
 const port = process.env.PORT || 3000;
 
-const appVersion = process.env.APP_VERSION || "1.0.0";
+const appVersion = process.env.APP_VERSION || "2.0.0";
 const release = process.env.RELEASE || "stable";
 
 app.get("/", (req, res) => {

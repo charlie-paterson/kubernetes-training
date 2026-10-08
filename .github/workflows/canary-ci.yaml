@@ -16,6 +16,8 @@ on:
       - "canary-platform/**"
       - ".github/workflows/**"
 
+  workflow_dispatch:
+
 permissions:
   contents: read
   packages: write
@@ -71,6 +73,7 @@ jobs:
 
   deploy-stable:
     needs: build
+    if: github.event_name == 'workflow_dispatch'
     runs-on: self-hosted
 
     steps:
@@ -83,4 +86,3 @@ jobs:
             --set image.tag=${{ github.sha }} \
             --set app.version=1.0.0 \
             --set app.release=stable
-            
