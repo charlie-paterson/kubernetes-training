@@ -55,6 +55,9 @@ spec:
 
   strategy:
     canary:
+      stableService: {{ include "canary-app.fullname" . }}-stable
+      canaryService: {{ include "canary-app.fullname" . }}-canary
+
       steps:
         - setWeight: 10
         - pause: {}
