@@ -86,3 +86,19 @@ jobs:
             --set image.tag=${{ github.sha }} \
             --set app.version=1.0.0 \
             --set app.release=stable
+
+  deploy-canary:
+    needs: build
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy canary release
+        runs: | 
+          helm upgrade --install canary-canary ./canary-platform/helm \
+            --set image.tag=${{ github.sha }} \
+            --set app.version=2.0.0 \
+            --set app.release=canary
