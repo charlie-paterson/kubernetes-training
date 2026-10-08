@@ -3,8 +3,6 @@ kind: Service
 metadata:
   name: {{ include "canary-app.fullname" . }}-stable
 spec:
-  selector:
-    {{- include "canary-app.selectorLabels" . | nindent 4 }}
   ports:
     - name: http
       port: 80
@@ -17,8 +15,6 @@ kind: Service
 metadata:
   name: {{ include "canary-app.fullname" . }}-canary
 spec:
-  selector:
-    {{- include "canary-app.selectorLabels" . | nindent 4 }}
   ports:
     - name: http
       port: 80
