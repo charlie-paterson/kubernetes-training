@@ -71,7 +71,7 @@ jobs:
           docker push \
             ghcr.io/${{ github.repository_owner }}/canary-demo:${{ github.sha }}
 
-  deploy-stable:
+  deploy:
     needs: build
     if: github.event_name == 'workflow_dispatch'
     runs-on: self-hosted
@@ -80,25 +80,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy stable release
+      - name: Deploy progressive rollout
         run: |
-          helm upgrade --install canary-stable ./canary-platform/helm \
-            --set image.tag=${{ github.sha }} \
-            --set app.version=1.0.0 \
-            --set app.release=stable
-
-  deploy-canary:
-    needs: build
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: self-hosted
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Deploy canary release
-        run: |
-          helm upgrade --install canary-canary ./canary-platform/helm \
+          helm upgrade --install progressive ./canary-platform/helm \
             --set image.tag=${{ github.sha }} \
             --set app.version=2.0.0 \
             --set app.release=canary
