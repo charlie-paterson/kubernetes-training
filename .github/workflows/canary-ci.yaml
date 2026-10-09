@@ -25,7 +25,8 @@ on:
         options:
           - baseline
           - canary
-          - reset
+          - promote
+        #  - reset
         default: baseline
 
 permissions:
@@ -89,10 +90,30 @@ jobs:
             --set app.version=2.0.0 \
             --set app.release=canary
 
-      - name: Reset canary deployment
-        if: inputs.deployment_mode == 'reset'
+#      - name: Reset canary deployment
+#        if: inputs.deployment_mode == 'reset'
+#        run: |
+#          helm uninstall progressive || true
+#          kubectl delete ingress canary-app-ingress \
+#            progressive-canary-app-canary-app-ingress-canary \
+#            --ignore-not-found
+
+
+  promote:
+    needs: test
+    if: github.event_name == 'workflow_dispatch' && inputs.deployment_mode == 'promote'
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Argo Rollouts kubectl plugin
         run: |
-          helm uninstall progressive || true
-          kubectl delete ingress canary-app-ingress \
-            progressive-canary-app-canary-app-ingress-canary \
-            --ignore-not-found
+          mkdir -p "$HOME/.local/bin"
+          curl -fsSL \
+            https://github.com/argoproj/argo-rollouts/releases/latest/download/kubectl-argo-rollouts-linux-amd64 \
+            -o "$HOME/.local/bin/kubectl-argo-rollouts"
+          chmod +x "$HOME/.local/bin/kubectl-argo-rollouts"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Promote canary to next step
+        run: kubectl argo rollouts promote progressive-canary-app
