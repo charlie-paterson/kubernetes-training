@@ -25,6 +25,7 @@ on:
         options:
           - baseline
           - canary
+          - reset
         default: baseline
 
 permissions:
@@ -87,3 +88,11 @@ jobs:
             --set image.tag=${{ github.sha }} \
             --set app.version=2.0.0 \
             --set app.release=canary
+
+      - name: Reset canary deployment
+        if: inputs.deployment_mode == 'reset'
+        run: |
+          helm uninstall progressive || true
+          kubectl delete ingress canary-app-ingress \
+            progressive-canary-app-canary-app-ingress-canary \
+            --ignore-not-found
