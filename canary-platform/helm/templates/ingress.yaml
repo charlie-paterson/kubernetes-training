@@ -16,6 +16,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "canary.app.fullname" . }}-stable
+                name: {{ include "canary-app.fullname" . }}-stable
                 port:
                   number: 80
