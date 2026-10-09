@@ -22,5 +22,5 @@ spec:
                       - -c 
                       - >-
                         curl --fail --silent --show-error
-                        http://{{ include "canary-app.fullname" . }}-canary.default.svc.cluster.locsl/health
+                        http://{{ include "canary-app.fullname" . }}-canary.default.svc.cluster.local/health
                 restartPolicy: Never
