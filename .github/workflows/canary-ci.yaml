@@ -26,7 +26,7 @@ on:
           - baseline
           - canary
           - promote
-        #  - reset
+          - reset
         default: baseline
 
 permissions:
@@ -79,7 +79,7 @@ jobs:
         run: |
           helm upgrade --install progressive ./canary-platform/helm \
             --set image.tag=${{ github.sha }} \
-            --set app.version=1.0.0 \
+            --set app.version=2.0.0 \
             --set app.release=stable \
             --set-json 'strategy.canary.steps=[]'
 
@@ -88,16 +88,16 @@ jobs:
         run: |
           helm upgrade --install progressive ./canary-platform/helm \
             --set image.tag=${{ github.sha }} \
-            --set app.version=2.0.0 \
+            --set app.version=2.0.1 \
             --set app.release=canary
 
-#      - name: Reset canary deployment
-#        if: inputs.deployment_mode == 'reset'
-#        run: |
-#          helm uninstall progressive || true
-#          kubectl delete ingress canary-app-ingress \
-#            progressive-canary-app-canary-app-ingress-canary \
-#            --ignore-not-found
+      - name: Reset canary deployment
+        if: inputs.deployment_mode == 'reset'
+        run: |
+          helm uninstall progressive || true
+          kubectl delete ingress canary-app-ingress \
+            progressive-canary-app-canary-app-ingress-canary \
+            --ignore-not-found
 
 
   promote:
