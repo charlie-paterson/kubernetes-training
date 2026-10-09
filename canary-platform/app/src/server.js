@@ -9,7 +9,7 @@ const release = process.env.RELEASE || "stable";
 
 app.get("/", (req, res) => {
   res.json({
-    message: "Kubernetes Canary Deployment Platform - v2",
+    message:`Kubernetes Canary Deployment Platform - v${appVersion}`,
     version: appVersion,
     release,
     hostname: os.hostname()
