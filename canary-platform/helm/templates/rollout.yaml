@@ -47,6 +47,9 @@ spec:
       trafficRouting:
         nginx:
           stableIngress: canary-app-ingress
+      analysis:
+        templates:
+          - templateName: {{ include "canary-app.fullname" . }}-health-check
       steps:
         - setWeight: 10
         - pause: {}

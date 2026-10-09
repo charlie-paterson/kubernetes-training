@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: {{ include "canary-app.fullname" . }}-health-check
+spec:
+  metrics:
+    - name: canary-health
+      interval: 15s
+      count: 0
+      failureLimit: 1
+      provider:
+        job:
+          spec:
+            backoffLimit: 0
+            template:
+              spec:
+                containers:
+                  - name: health-check
+                    image: curlimages/curl:8.12.1
+                    command:
+                      - sh
+                      - -c 
+                      - >-
+                        curl --fail --silent --show-error
+                        http://{{ include "canary-app.fullname" . }}-canary.default.svc.cluster.locsl/health
+                restartPolicy: Never
