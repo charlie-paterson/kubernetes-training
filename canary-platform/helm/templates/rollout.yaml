@@ -58,6 +58,10 @@ spec:
       stableService: {{ include "canary-app.fullname" . }}-stable
       canaryService: {{ include "canary-app.fullname" . }}-canary
 
+      trafficRouting:
+        nginx:
+          stableIngress: canary-app-ingress
+
       steps:
         - setWeight: 10
         - pause: {}
