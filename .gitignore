@@ -1,0 +1,2 @@
+# Training project: never commit k8s Secret manifests
+config-secrets/k8s/secret.yaml

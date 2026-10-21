@@ -19,8 +19,13 @@ spec:
                     image: curlimages/curl:8.12.1
                     command:
                       - sh
-                      - -c 
+                      - -c
                       - >-
+                        {{- if .Values.analysis.forceFailure }}
+                        echo "Intentional canary analysis failure";
+                        exit 1
+                        {{- else }}
                         curl --fail --silent --show-error
                         http://{{ include "canary-app.fullname" . }}-canary.default.svc.cluster.local/health
+                        {{- end }}
                 restartPolicy: Never

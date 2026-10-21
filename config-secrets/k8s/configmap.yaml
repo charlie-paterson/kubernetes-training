@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-demo
+data:
+  APP_MESSAGE: "Hello from a Kubernetes ConfigMap"
+  APP_ENV: "training"
