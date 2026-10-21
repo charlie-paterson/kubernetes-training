@@ -1,0 +1,16 @@
+replicaCount: 2
+
+image:
+  repository: ghcr.io/charlie-paterson/config-secrets-demo
+  tag: latest
+  pullPolicy: Always
+
+service:
+  port: 80
+  targetPort: 3000
+
+config:
+  message: "Hello from a Kubernetes ConfigMap!"
+  environment: "training"
+
+secretName: config-demo-secret

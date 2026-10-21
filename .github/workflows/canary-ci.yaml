@@ -7,7 +7,7 @@ on:
       - "feature/**"
     paths:
       - "canary-platform/**"
-      - ".github/workflows/**"
+      - ".github/workflows/canary-ci.yaml"
 
   pull_request:
     branches:

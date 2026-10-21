@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-secrets-demo
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: config-secrets-demo
+  template:
+    metadata:
+      labels:
+        app: config-secrets-demo
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: config-demo
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 3000
+          env:
+            - name: APP_MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: config-secrets-demo
+                  key: APP_MESSAGE
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: config-secrets-demo
+                  key: APP_ENV
+            - name: API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secretName }}
+                  key: API_TOKEN
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-secrets-demo
+data:
+  APP_MESSAGE: {{ .Values.config.message | quote }}
+  APP_ENV: {{ .Values.config.environment | quote }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-secrets-demo
+spec:
+  selector:
+    app: config-secrets-demo
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+  type: ClusterIP
